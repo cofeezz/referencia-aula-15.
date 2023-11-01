@@ -10,7 +10,7 @@ var cloud, cloudsGroup, cloudImage;
 var obstaclesGroup, obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obstacle6;
 // pontuação
 var score;
-
+var gameOver, restart;
 
 function preload(){
   trex_running = loadAnimation("trex1.png","trex3.png","trex4.png");
@@ -27,6 +27,9 @@ function preload(){
   obstacle5 = loadImage("obstacle5.png");
   obstacle6 = loadImage("obstacle6.png");
   
+
+  gameOverImg = loadImage("gameOver.png");
+  restart = loadImage("restart.png");
 }
 
 function setup() {
@@ -41,9 +44,22 @@ function setup() {
   ground.addImage("ground",groundImage);
   ground.x = ground.width /2;
   ground.velocityX = -4;
-  
+
+  gameOver = createSprite(300,100);
+  gameOver.addImage(gameOverImg);
+
+  restart = createSprite(300,100);
+  restart.addImage(restartImg);
+
+  gameOver.scale = 0.5;
+  restart.scale = 0.5;
+
   invisibleGround = createSprite(200,190,400,10);
   invisibleGround.visible = false;
+
+  cloudsGroup = new Group();
+  obstaclesGroup = new Group();
+   
   //imprimindo uma string concatenada
   console.log("ola " + " Mundo");
   
@@ -90,8 +106,12 @@ function draw() {
    //6 Mova o código de solo invisível para fora do bloco play e dentro do draw, pois ele é necessário para apoiar o T-Rex o tempo todo.
   else if(gameState===END){
   //mover o solo
-  ground.velocityX= 0;
+    ground.velocityX= 0;
+    gameOver.visible = true;
+    restart.visible = true;
 
+    obstaclesGroup.setVelocityXEach(0);
+    cloudsGroup.setVelocityXEach(0);
   }  
   trex.collide(invisibleGround);
   drawSprites();
